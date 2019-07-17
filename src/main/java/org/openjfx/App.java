@@ -54,7 +54,7 @@ public class App extends Application {
         digitList.forEach(each -> digitButtons.add(new Button(each)));
         operandList.forEach(each -> operandButtons.add(new Button(each)));
         Button resultButton = new Button("=");
-        Button clearButton = new Button("Clr");
+        Button clearButton = new Button("C");
 
             allButtonsList.addAll(digitButtons);
             allButtonsList.addAll(operandButtons);
@@ -89,14 +89,11 @@ public class App extends Application {
     }
 
 /*
-    private static Parent loadFXML() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("primary.fxml"));
-        return fxmlLoader.load();
-    }
-*/
-
     public static void main(String[] args) {
         launch();
     }
+*/
+
+
 
 }

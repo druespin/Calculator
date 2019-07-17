@@ -3,10 +3,12 @@ package org.openjfx;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-
 import java.util.List;
-
 import static org.openjfx.App.*;
+
+/*
+Class to process buttons clicking
+ */
 
 public class ButtonHandlers {
 
@@ -85,6 +87,7 @@ public class ButtonHandlers {
             public void handle(ActionEvent actionEvent) {
                 display.setText("");
                 operation.setLength(0);
+                number.setLength(0);
             }
         });
     }
