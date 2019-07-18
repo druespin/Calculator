@@ -1,11 +1,4 @@
-package org.openjfx;
-
-import java.io.IOException;
-import java.util.List;
-import javafx.fxml.FXML;
-
-import static org.openjfx.App.operandList;
-import static org.openjfx.App.report;
+package org.openjfx.fx;
 
 
 public class MathMethods {
@@ -24,7 +17,7 @@ public class MathMethods {
             }
             else numbers = operation.split(operand);
 
-            if (!numbers[0].isEmpty() && !numbers[1].isEmpty()) {
+            if (numbers.length > 1 && !numbers[0].isEmpty() && !numbers[1].isEmpty()) {
                 int num1 = Integer.parseInt(numbers[0]);
                 int num2 = Integer.parseInt(numbers[1]);
 
@@ -41,7 +34,6 @@ public class MathMethods {
                     result = String.valueOf((double) num1 / num2);
                 }
             }
-            else result = "";
         }
         return result;
     }

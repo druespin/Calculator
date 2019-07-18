@@ -1,4 +1,4 @@
-package org.openjfx;
+package org.openjfx.fx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -74,6 +74,8 @@ public class ButtonHandlers {
 
                 else {
                     report.appendText("Invalid operation\n");
+                    operation.setLength(0);
+                    number.setLength(0);
                 }
             }
         });

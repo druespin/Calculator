@@ -5,7 +5,9 @@ module org.openjfx {
     requires jdk.httpserver;
     requires jersey.server;
     requires jersey.container.jdk.http;
+    requires java.sql;
 
     opens org.openjfx to javafx.fxml;
+    opens org.openjfx.restapi;
     exports org.openjfx;
 }

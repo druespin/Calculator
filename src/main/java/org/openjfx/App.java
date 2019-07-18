@@ -1,6 +1,7 @@
 package org.openjfx;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,13 +12,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.openjfx.fx.ButtonHandlers;
+import org.openjfx.restapi.ServerSetup;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.openjfx.ButtonHandlers.operation;
-
 
 /**
  * JavaFX App
@@ -27,17 +27,18 @@ public class App extends Application {
     private static Scene scene;
     public static TextField display;
     public static TextArea report;
-
     public static List<String> digitList = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
     public static List<String> operandList = List.of("+", "-", "*", "/");
-    public List<Button> digitButtons = new ArrayList<>();
-    public List<Button> operandButtons = new ArrayList<>();
-    public List<Button> allButtonsList = new ArrayList<>();;
-
 
     @Override
     public void start(Stage stage) throws IOException {
 
+        // Task for rest service
+        Task rest_task = new ServerSetup();
+        Thread rest_thread = new Thread(rest_task);
+        rest_thread.start();
+
+        // Setting layout
         HBox root = new HBox();
         root.setPadding(new Insets(10.0));
 
@@ -51,10 +52,15 @@ public class App extends Application {
         display.setEditable(false);
 
         // Create buttons
-        digitList.forEach(each -> digitButtons.add(new Button(each)));
-        operandList.forEach(each -> operandButtons.add(new Button(each)));
+        List<Button> digitButtons = new ArrayList<>();
+        List<Button> operandButtons = new ArrayList<>();
+        List<Button> allButtonsList = new ArrayList<>();;
+
         Button resultButton = new Button("=");
         Button clearButton = new Button("C");
+
+        digitList.forEach(each -> digitButtons.add(new Button(each)));
+        operandList.forEach(each -> operandButtons.add(new Button(each)));
 
             allButtonsList.addAll(digitButtons);
             allButtonsList.addAll(operandButtons);
@@ -62,10 +68,10 @@ public class App extends Application {
             allButtonsList.add(clearButton);
 
             ButtonHandlers buttonHandlers = new ButtonHandlers();
-            buttonHandlers.digitButtonHandler(digitButtons);
-            buttonHandlers.operandButtonHandler(operandButtons);
-            buttonHandlers.resultButtonHandler(resultButton);
-            buttonHandlers.clearButtonHandler(clearButton);
+                buttonHandlers.digitButtonHandler(digitButtons);
+                buttonHandlers.operandButtonHandler(operandButtons);
+                buttonHandlers.resultButtonHandler(resultButton);
+                buttonHandlers.clearButtonHandler(clearButton);
 
         // Button area
         TilePane tiles = new TilePane();
@@ -88,12 +94,9 @@ public class App extends Application {
         stage.show();
     }
 
-/*
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
         launch();
     }
-*/
-
-
 
 }
