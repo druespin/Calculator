@@ -17,7 +17,7 @@ public class ServerSetup extends Task {
         ResourceConfig config = new ResourceConfig(RestAPI.class);
 
         @Override
-        protected Object call () throws Exception {
+        protected HttpServer call () throws Exception {
             return createHttpServer(baseUri, config);
         }
 }

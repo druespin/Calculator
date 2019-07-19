@@ -11,52 +11,55 @@ import java.util.List;
 
 public class DbApi {
 
-    static Connection dbConnection = null;
-    static Statement statement = null;
+    private Connection dbConnection = null;
+    private Statement statement = null;
 
-    public static void createTable() throws SQLException {
+    public void createTable() throws SQLException {
 
-        String createTableSQL = "CREATE TABLE CALCULATIONS("
-                + "ID BIGINT PRIMARY KEY, "
-                + "operation VARCHAR(20) NOT NULL, "
-                + "created_date DATE NOT NULL)";
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS history ("
+                + "id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY, "
+                + "operation varchar(20) NOT NULL);";
 
         try {
-            dbConnection = new DbConnector().call();
+            dbConnection = new DbConnector().connect();
             statement = dbConnection.createStatement();
 
             // выполнить SQL запрос
             statement.execute(createTableSQL);
-            System.out.println("Table is created!");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.out.println(e.getMessage());
-        } finally {
-            if (statement != null) {
-                statement.close();
-            }
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
         }
     }
 
-    public static void insertToDB(String entry) throws SQLException {
+    public void insertToDB(String entry) throws SQLException {
 
-        String insertSQL = "INSERT INTO CALCULATIONS "
-                                + "(operation, created_date)"
-                                + " VALUES (" + entry + ","
-                                + new Date().toString() + ")";
+        String insertSQL = "INSERT INTO history "
+                                + "(operation) "
+                                + "VALUES (\'" + entry + "\');";
 
-        try {
+
             statement.execute(insertSQL);
-        }
-        catch (SQLException e)  {}
     }
 
-    public static List<String> get10LatestEntries() throws SQLException {
+    public List<String> getAllEntries() throws SQLException {
 
         List<String> list = new ArrayList<>();
-        String selectSQL = "SELECT operation FROM CALCULATIONS DESC LIMIT 10";
+        String selectSQL = "SELECT operation FROM history;";
+        ResultSet rs = statement.executeQuery(selectSQL);
+
+        while (rs.next())
+        {
+            list.add(rs.getString("operation"));
+        }
+        return list;
+    }
+
+    public List<String> get10LatestEntries() throws SQLException {
+
+        List<String> list = new ArrayList<>();
+
+        String selectSQL = "SELECT operation FROM history ORDER BY id DESC LIMIT 10;";
         ResultSet rs = statement.executeQuery(selectSQL);
 
         while (rs.next())

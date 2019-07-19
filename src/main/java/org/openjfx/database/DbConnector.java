@@ -5,15 +5,14 @@ import javafx.concurrent.Task;
 
 import java.sql.*;
 
-public class DbConnector extends Task {
+public class DbConnector {
 
     static final String DB_URL = "jdbc:postgresql://localhost:5432/calculator";
-    static final String USERNAME = "drue";
-    static final String PASSWORD = "pass";
+    static final String USERNAME = "user";
+    static final String PASSWORD = "userpass";
 
 
-    @Override
-    protected Connection call() throws Exception {
+    protected Connection connect() throws Exception {
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {

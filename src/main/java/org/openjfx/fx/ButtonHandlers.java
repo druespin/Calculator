@@ -81,7 +81,7 @@ public class ButtonHandlers {
         });
     }
 
-    // Clear button handler
+    // Clear result button handler
     public void clearButtonHandler(Button clearButton) {
 
         clearButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -90,6 +90,17 @@ public class ButtonHandlers {
                 display.setText("");
                 operation.setLength(0);
                 number.setLength(0);
+            }
+        });
+    }
+
+    // Clear history button handler
+    public void clearHistoryButtonHandler(Button clearButton) {
+
+        clearButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                report.clear();
             }
         });
     }

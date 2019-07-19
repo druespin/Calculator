@@ -9,5 +9,6 @@ module org.openjfx {
 
     opens org.openjfx to javafx.fxml;
     opens org.openjfx.restapi;
+    exports org.openjfx.database;
     exports org.openjfx;
 }
