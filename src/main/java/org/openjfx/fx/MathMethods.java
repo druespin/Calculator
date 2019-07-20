@@ -34,7 +34,8 @@ public class MathMethods {
                     result = String.valueOf(num1 * num2);
                 }
                 if ("/".equals(operand)) {
-                    result = String.valueOf((double) num1 / num2);
+                    result = String.valueOf(new BigDecimal((double) num1 / num2)
+                            .setScale(5, RoundingMode.HALF_UP));
                 }
             }
         }

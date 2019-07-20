@@ -7,12 +7,11 @@ import java.util.List;
 import static org.openjfx.App.*;
 
 /*
-Class to process buttons clicking
+ * Class to process buttons clicking
  */
 
 public class ButtonHandlers {
 
-    // same as operand
     private String operand = "";
 
     public static StringBuilder operation = new StringBuilder();
@@ -20,7 +19,8 @@ public class ButtonHandlers {
     // number
     private StringBuilder number = new StringBuilder();
 
-    // Digit buttons handler
+    /* Digit buttons handler
+     */
     public void digitButtonHandler(List<Button> digitButtons) {
 
         digitButtons.forEach(btn -> btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -29,12 +29,13 @@ public class ButtonHandlers {
                 String digit = btn.getText();
                 number.append(digit);
                 operation.append(digit);
-                display.setText(number.toString());
+                display_result.setText(number.toString());
             }
         }));
     }
 
-    // Operand buttons handler
+    /* Operand buttons handler
+     */
     public void operandButtonHandler(List<Button> operandButtons) {
 
         operandButtons.forEach(btn -> btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -56,7 +57,8 @@ public class ButtonHandlers {
                 && !operation.toString().contains("/");
     }
 
-    // Result button handler
+    /* Result button handler
+     */
     public void resultButtonHandler(Button resultButton) {
 
         resultButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,15 +67,15 @@ public class ButtonHandlers {
                 String result = MathMethods.calculate(operation.toString(), operand);
 
                 if (!result.isEmpty()) {
-                    display.setText(result);
+                    display_result.setText(result);
                     operation.append(" = " + result);
-                    report.appendText(operation.toString() + "\n");
+                    history_window.appendText(operation.toString() + "\n");
                     operation.setLength(0);
                     number.setLength(0);
                 }
 
                 else {
-                    report.appendText("Invalid operation\n");
+                    history_window.appendText("Invalid operation\n");
                     operation.setLength(0);
                     number.setLength(0);
                 }
@@ -81,26 +83,28 @@ public class ButtonHandlers {
         });
     }
 
-    // Clear result button handler
+    /* Clear result button handler
+     */
     public void clearButtonHandler(Button clearButton) {
 
         clearButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                display.setText("");
+                display_result.setText("");
                 operation.setLength(0);
                 number.setLength(0);
             }
         });
     }
 
-    // Clear history button handler
+    /* Clear history button handler
+     */
     public void clearHistoryButtonHandler(Button clearButton) {
 
         clearButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                report.clear();
+                history_window.clear();
             }
         });
     }

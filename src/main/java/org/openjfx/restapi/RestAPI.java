@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.openjfx.App.db;
-import static org.openjfx.App.report;
+import static org.openjfx.App.history_window;
 
 
 @Path("/rest")
@@ -30,12 +30,12 @@ public class RestAPI {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getLatest() throws SQLException {
 
-        report.clear();
+        history_window.clear();
         list = db.get10LatestEntries();
         StringBuilder output = new StringBuilder();
 
         list.forEach(entry -> {
-            report.appendText(entry + "\n");
+            history_window.appendText(entry + "\n");
             output.append(entry + "\n");
         });
 
@@ -47,12 +47,12 @@ public class RestAPI {
     @Produces(MediaType.TEXT_PLAIN)
     public Response getALl() throws SQLException {
 
-        report.clear();
+        history_window.clear();
         list = db.getAllEntries();
         StringBuilder output = new StringBuilder();
 
         list.forEach(entry -> {
-            report.appendText(entry + "\n");
+            history_window.appendText(entry + "\n");
             output.append(entry + "\n");
         });
 
@@ -64,9 +64,9 @@ public class RestAPI {
     @Produces(MediaType.TEXT_PLAIN)
     public Response submitToDb()  {
 
-        if (!report.getText().isEmpty())
+        if (!history_window.getText().isEmpty())
         {
-            list = Arrays.asList(report.getText().split("\n"));
+            list = Arrays.asList(history_window.getText().split("\n"));
 
                 list.forEach(entry -> {
                     try {
