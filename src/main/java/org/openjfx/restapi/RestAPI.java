@@ -9,33 +9,31 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.openjfx.App.db;
+import static org.openjfx.fx.Constants.*;
 import static org.openjfx.App.history_window;
 
 
 @Path("/rest")
 public class RestAPI {
 
-    List<String> list = new ArrayList<>();
+    private List<String> list = new ArrayList<>();
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getRep() {
+    public Response getOK() {
 
         return Response.ok("works").build();
     }
 
     @GET
-    @Path("/latest")
+    @Path("/latest-10")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getLatest() throws SQLException {
 
-        history_window.clear();
         list = db.get10LatestEntries();
         StringBuilder output = new StringBuilder();
 
         list.forEach(entry -> {
-            history_window.appendText(entry + "\n");
             output.append(entry + "\n");
         });
 
@@ -45,14 +43,12 @@ public class RestAPI {
     @GET
     @Path("/all")
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getALl() throws SQLException {
+    public Response getAll() throws SQLException {
 
-        history_window.clear();
         list = db.getAllEntries();
         StringBuilder output = new StringBuilder();
 
         list.forEach(entry -> {
-            history_window.appendText(entry + "\n");
             output.append(entry + "\n");
         });
 
@@ -69,7 +65,8 @@ public class RestAPI {
             list = Arrays.asList(history_window.getText().split("\n"));
 
                 list.forEach(entry -> {
-                    try {
+                    try
+                    {
                         db.insertToDB(entry);
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -79,4 +76,5 @@ public class RestAPI {
         }
         return Response.ok("Operations filed to history table").build();
     }
+
 }

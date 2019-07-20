@@ -13,14 +13,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.openjfx.database.DbApi;
 import org.openjfx.fx.ButtonHandlers;
 import org.openjfx.restapi.ServerSetup;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.openjfx.fx.Constants.*;
 
 /**
  * JavaFX App
@@ -30,16 +30,11 @@ public class App extends Application {
     private static Scene scene;
     public static TextField display_result;
     public static TextArea history_window;
-    public static List<String> digitList = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
-    public static List<String> operandList = List.of("+", "-", "*", "/");
-
-    // DB
-    public static DbApi db = new DbApi();
 
     @Override
     public void start(Stage stage) throws SQLException {
 
-        /* Create table in database
+        /* Create table in database (if not exists)
          */
             db.createTable();
 
@@ -52,57 +47,38 @@ public class App extends Application {
             HBox root = new HBox();
             root.setPadding(new Insets(10));
 
-        // Right (history) area
-            VBox vBoxRight = new VBox();
-            vBoxRight.setSpacing(10);
-            vBoxRight.setPadding(new Insets(10));
-            vBoxRight.setAlignment(Pos.CENTER);
-
-                Label history_label = new Label("History");
-                history_window = new TextArea();
-                history_window.setPrefRowCount(13);
-
-                Button clearHistory = new Button("Clear History");
-
-            vBoxRight.getChildren().addAll(history_label, history_window, clearHistory);
-
-        /* Left (buttons) area
+        /* Left (digit buttons) area
          */
-            VBox vBoxLeft = new VBox();
-            vBoxLeft.setSpacing(10);
-            vBoxLeft.setAlignment(Pos.CENTER);
-            vBoxLeft.setMinWidth(200);
+        VBox vBoxLeft = new VBox();
+        vBoxLeft.setPadding(new Insets(40, 0, 0 , 0));
+        vBoxLeft.setSpacing(10);
+        vBoxLeft.setAlignment(Pos.TOP_CENTER);
+        vBoxLeft.setMinWidth(200);
 
             // Display field
-                display_result = new TextField();
-                display_result.setMaxWidth(150);
-                display_result.setAlignment(Pos.CENTER_RIGHT);
-                display_result.setEditable(false);
+            display_result = new TextField();
+            display_result.setMaxWidth(150);
+            display_result.setAlignment(Pos.CENTER_RIGHT);
+            display_result.setEditable(false);
 
             // Create buttons
-                List<Button> digitButtons = new ArrayList<>();      // buttons 1, 2, 3, ..
-                List<Button> operandButtons = new ArrayList<>();    // buttons +, -, *, /
-                List<Button> allButtonsList = new ArrayList<>();;
+            List<Button> digitButtons = new ArrayList<>();      // buttons 1, 2, 3, ..
+            DIGITS.forEach(each -> digitButtons.add(new Button(each)));
+            List<Button> operandButtons = new ArrayList<>();    // buttons +, -, *, /
+            OPERANDS.forEach(each -> operandButtons.add(new Button(each)));
 
-                Button resultButton = new Button("=");
-                Button clearResult = new Button("C");
+            Button resultBtn = new Button(RESULT_SYMBOL);
+            Button clearResultBtn = new Button(CLEAR_DISPLAY);
 
-                digitList.forEach(each -> digitButtons.add(new Button(each)));
-                operandList.forEach(each -> operandButtons.add(new Button(each)));
+            List<Button> allButtonsList = new ArrayList<>();
 
-                allButtonsList.addAll(digitButtons);
-                allButtonsList.addAll(operandButtons);
-                allButtonsList.add(resultButton);
-                allButtonsList.add(clearResult);
+            allButtonsList.addAll(digitButtons);
+            allButtonsList.addAll(operandButtons);
+            allButtonsList.add(resultBtn);
+            allButtonsList.add(clearResultBtn);
 
-                ButtonHandlers buttonHandlers = new ButtonHandlers();
-                    buttonHandlers.digitButtonHandler(digitButtons);
-                    buttonHandlers.operandButtonHandler(operandButtons);
-                    buttonHandlers.resultButtonHandler(resultButton);
-                    buttonHandlers.clearButtonHandler(clearResult);
-                    buttonHandlers.clearHistoryButtonHandler(clearHistory);
 
-        // Buttons layout
+            // Buttons layout
             TilePane tiles = new TilePane();
             tiles.setAlignment(Pos.CENTER);
             tiles.setPrefTileHeight(30.0);
@@ -112,17 +88,54 @@ public class App extends Application {
             tiles.setVgap(10.0);
             tiles.getChildren().addAll(allButtonsList);
 
-            vBoxLeft.getChildren().addAll(display_result, tiles);
+        vBoxLeft.getChildren().addAll(display_result, tiles);
 
-        root.getChildren().addAll(vBoxLeft, vBoxRight);
-        scene = new Scene(root, 400, 300);
+        /* Center (history) area
+         */
+        VBox vBoxCenter = new VBox();
+        vBoxCenter.setMinWidth(150);
+        vBoxCenter.setPadding(new Insets(10));
+        vBoxCenter.setSpacing(10);
+        vBoxCenter.setAlignment(Pos.TOP_CENTER);
+
+            Label history_label = new Label(HISTORY);
+            history_window = new TextArea();
+            history_window.setMinHeight(200);
+
+        vBoxCenter.getChildren().addAll(history_label, history_window);
+
+        /*  Right area
+         */
+        VBox vBoxRight = new VBox();
+        vBoxRight.setMinWidth(150);
+        vBoxRight.setPadding(new Insets(40, 0, 0, 0));
+        vBoxRight.setSpacing(10);
+        vBoxRight.setAlignment(Pos.TOP_CENTER);
+
+            Button clearHistoryBtn = new Button(CLEAR_HISTORY);
+            Button uploadBtn = new Button(SAVE_HISTORY_TO_DATABASE);
+            Button downloadBtn = new Button(DOWNLOAD_10_LATEST);
+
+        vBoxRight.getChildren().addAll(clearHistoryBtn, uploadBtn, downloadBtn);
+
+        // All buttons initialization
+        ButtonHandlers buttonHandlers = new ButtonHandlers();
+            buttonHandlers.digitButtonHandler(digitButtons);
+            buttonHandlers.operandButtonHandler(operandButtons);
+            buttonHandlers.resultButtonHandler(resultBtn);
+            buttonHandlers.clearResultButtonHandler(clearResultBtn);
+            buttonHandlers.clearHistoryButtonHandler(clearHistoryBtn);
+            buttonHandlers.downloadButtonHandler(downloadBtn);
+            buttonHandlers.uploadButtonHandler(uploadBtn);
+
+        root.getChildren().addAll(vBoxLeft, vBoxCenter, vBoxRight);
+        scene = new Scene(root, 550, 300);
         stage.setScene(scene);
-        stage.setTitle("Calculator");
+        stage.setTitle(TITLE);
         stage.show();
     }
 
-
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         launch();
     }
 

@@ -1,9 +1,8 @@
 package org.openjfx.fx;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-
+/*
+    Calculations class
+ */
 public class MathMethods {
 
     public static String calculate(String operation, String operand) {
@@ -34,8 +33,12 @@ public class MathMethods {
                     result = String.valueOf(num1 * num2);
                 }
                 if ("/".equals(operand)) {
-                    result = String.valueOf(new BigDecimal((double) num1 / num2)
-                            .setScale(5, RoundingMode.HALF_UP));
+
+                    result = (num2 == 0) ? "big bang!" :
+                            String.valueOf((double) num1 / (double) num2);
+
+                    if (result.length() > 10)
+                        result = result.substring(0, 9);
                 }
             }
         }

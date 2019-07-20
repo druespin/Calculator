@@ -3,11 +3,18 @@ package org.openjfx.fx;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import static org.openjfx.App.*;
+
+import static org.openjfx.App.display_result;
+import static org.openjfx.App.history_window;
+import static org.openjfx.fx.Constants.*;
 
 /*
- * Class to process buttons clicking
+ * Class to process buttons click events
  */
 
 public class ButtonHandlers {
@@ -16,10 +23,11 @@ public class ButtonHandlers {
 
     public static StringBuilder operation = new StringBuilder();
 
-    // number
+    // Number typed
     private StringBuilder number = new StringBuilder();
 
-    /* Digit buttons handler
+    /*
+        Digit buttons handler
      */
     public void digitButtonHandler(List<Button> digitButtons) {
 
@@ -34,7 +42,8 @@ public class ButtonHandlers {
         }));
     }
 
-    /* Operand buttons handler
+    /*
+        Operand buttons handler
      */
     public void operandButtonHandler(List<Button> operandButtons) {
 
@@ -43,7 +52,10 @@ public class ButtonHandlers {
             public void handle(ActionEvent actionEvent) {
                 operand = btn.getText();
 
-                if (noOperandYet()) {
+                /* Add operand to operation if there is no one yet
+                     Only one math action is allowed
+                 */
+                if (operandNotPresent()) {
                     operation.append(operand);
                     number.setLength(0);
                 }
@@ -51,13 +63,17 @@ public class ButtonHandlers {
         }));
     }
 
-    boolean noOperandYet() {
-        return !operation.toString().isEmpty() && !operation.toString().contains("+") &&
+    /*
+        Ensure operation is not empty and has no operand yet
+     */
+    boolean operandNotPresent() {
+        return !operation.toString().contains("+") &&
                 !operation.toString().contains("-") && !operation.toString().contains("*")
                 && !operation.toString().contains("/");
     }
 
-    /* Result button handler
+    /*
+        Result button handler
      */
     public void resultButtonHandler(Button resultButton) {
 
@@ -83,11 +99,12 @@ public class ButtonHandlers {
         });
     }
 
-    /* Clear result button handler
+    /*
+        Clear result button handler
      */
-    public void clearButtonHandler(Button clearButton) {
+    public void clearResultButtonHandler(Button clearResultButton) {
 
-        clearButton.setOnAction(new EventHandler<ActionEvent>() {
+        clearResultButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 display_result.setText("");
@@ -97,14 +114,66 @@ public class ButtonHandlers {
         });
     }
 
-    /* Clear history button handler
+    /*
+        Clear history button handler
      */
-    public void clearHistoryButtonHandler(Button clearButton) {
+    public void clearHistoryButtonHandler(Button clearHistoryButton) {
 
-        clearButton.setOnAction(new EventHandler<ActionEvent>() {
+        clearHistoryButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 history_window.clear();
+            }
+        });
+    }
+
+    /*
+        'Save History to DB' button handler
+     */
+    public void uploadButtonHandler(Button uploadButton) {
+
+        uploadButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                if (!history_window.getText().isEmpty())
+                {
+                    List<String> list = Arrays.asList(history_window.getText().split("\n"));
+
+                    list.forEach(entry -> {
+                        try
+                        {
+                            db.insertToDB(entry);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    });
+
+                }
+            }
+        });
+    }
+
+    /*
+        'Download 10 latest' button handler
+     */
+    public void downloadButtonHandler(Button downloadButton) {
+
+        downloadButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+
+                List<String> list = new ArrayList<>();
+                try {
+                    list = db.get10LatestEntries();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                history_window.clear();
+                list.forEach(entry -> {
+                    history_window.appendText(entry + "\n");
+                });
             }
         });
     }

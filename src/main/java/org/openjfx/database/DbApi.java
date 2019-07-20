@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -42,6 +41,8 @@ public class DbApi {
             statement.execute(insertSQL);
     }
 
+    /* Get all data from db
+     */
     public List<String> getAllEntries() throws SQLException {
 
         List<String> list = new ArrayList<>();
@@ -55,6 +56,8 @@ public class DbApi {
         return list;
     }
 
+    /* Get 10 latest entries from db
+     */
     public List<String> get10LatestEntries() throws SQLException {
 
         List<String> list = new ArrayList<>();
@@ -67,6 +70,16 @@ public class DbApi {
             list.add(rs.getString("operation"));
         }
         return list;
+    }
+
+
+    /* Delete all data from db (not applied in the App)
+     */
+    public void deleteAll() throws SQLException {
+
+        String selectSQL = "DELETE FROM history;";
+        statement.execute(selectSQL);
+
     }
 }
 
