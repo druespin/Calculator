@@ -13,8 +13,8 @@ import static org.openjfx.App.display_result;
 import static org.openjfx.App.history_window;
 import static org.openjfx.fx.Constants.*;
 
-/*
- * Class to process buttons click events
+/**
+ * Processing all buttons click events
  */
 
 public class ButtonHandlers {
@@ -27,7 +27,7 @@ public class ButtonHandlers {
     private StringBuilder number = new StringBuilder();
 
     /*
-        Digit buttons handler
+        All digit buttons handler
      */
     public void digitButtonHandler(List<Button> digitButtons) {
 
@@ -73,7 +73,7 @@ public class ButtonHandlers {
     }
 
     /*
-        Result button handler
+       Result button (=) handler
      */
     public void resultButtonHandler(Button resultButton) {
 

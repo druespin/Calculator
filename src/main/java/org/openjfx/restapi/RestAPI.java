@@ -12,6 +12,9 @@ import java.util.List;
 import static org.openjfx.fx.Constants.*;
 import static org.openjfx.App.history_window;
 
+/**
+ * REST requests
+ */
 
 @Path("/rest")
 public class RestAPI {

@@ -3,6 +3,9 @@ import org.openjfx.database.DbApi;
 
 import java.util.List;
 
+/**
+ * Constants
+ */
 public class Constants {
 
     public static final List<String> DIGITS = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");

@@ -1,10 +1,11 @@
 package org.openjfx.database;
 
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-
 import java.sql.*;
 
+
+/**
+ * Database connection
+ */
 public class DbConnector {
 
     static final String DB_URL = "jdbc:postgresql://localhost:5432/calculator";
