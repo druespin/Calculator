@@ -6,9 +6,15 @@ Only integer numbers are supported.
 
 Calculation results are stored in the database (pgsql) located on the local server.
 
+## Installation
+
+Using git bash
+
+* cd path/to/project/dir
+* git clone https://github.com/druespin/Calculator
 
 ### Libraries used
 
 * UI based on JavaFX
-* PostgresQL db
-* JAX-RS for REST API
+* PostgreSQL
+* JAX-RS for RESTful API implementation
