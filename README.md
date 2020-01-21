@@ -6,6 +6,11 @@ Only integer numbers are supported.
 
 Calculation results are stored in the database (pgsql) located on the local server.
 
+## Pre-install 
+
+* The application uses Apache Tomcat as an external app server https://tomcat.apache.org/download-90.cgi
+* PostgreSQL database needs to be installed https://www.postgresql.org/download/
+
 ## Installation
 
 Using git bash
@@ -16,5 +21,4 @@ Using git bash
 ### Libraries used
 
 * UI based on JavaFX
-* PostgreSQL
 * JAX-RS for RESTful API implementation
